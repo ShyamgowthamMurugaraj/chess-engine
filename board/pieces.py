@@ -1,3 +1,5 @@
+from utils import filter_moves
+
 
 
 class Empty:
@@ -60,7 +62,7 @@ class Pawn(Piece):
                 pass
 
         
-        return valid_moves
+        return filter_moves(valid_moves)
     def __repr__(self) -> str:
         return f"{self.color}P"
 
@@ -123,7 +125,7 @@ class Rook(Piece):
             pass
         
 
-        return valid_moves
+        return filter_moves(valid_moves)
     def __repr__(self) -> str:
         return f"{self.color}R"
 
@@ -164,7 +166,7 @@ class Bishop(Piece):
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]-1][current[1]+1])==Empty and current[0]-1>=0) and ~self.board[current[0]-1][current[1]+1]==self.color:
+                if (type(self.board[current[0]-1][current[1]+1])==Empty and current[0]-1>=0) or ~self.board[current[0]-1][current[1]+1]==self.color:
                     valid_moves.append((current[0]-1,current[1]+1))
                     current=(current[0]-1,current[1]+1)
                     continue
@@ -184,7 +186,7 @@ class Bishop(Piece):
                     break
         except:
             pass
-        return valid_moves
+        return filter_moves(valid_moves)
     def __repr__(self) -> str:
         return f"{self.color}B"
         
@@ -225,7 +227,7 @@ class Queen(Piece):
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]-1][current[1]+1])==Empty and current[0]-1>=0) and ~self.board[current[0]-1][current[1]+1]==self.color:
+                if (type(self.board[current[0]-1][current[1]+1])==Empty and current[0]-1>=0) or ~self.board[current[0]-1][current[1]+1]==self.color:
                     valid_moves.append((current[0]-1,current[1]+1))
                     current=(current[0]-1,current[1]+1)
                     continue
@@ -294,7 +296,7 @@ class Queen(Piece):
             pass
         
         
-        return valid_moves
+        return filter_moves(valid_moves)
     
     def __repr__(self) -> str:
         return f"{self.color}Q"
@@ -355,7 +357,7 @@ class Knight(Piece):
         except:
             pass
         
-        return valid_moves
+        return filter_moves(valid_moves)
     
 
     def __repr__(self) -> str:
@@ -412,8 +414,7 @@ class King(Piece):
         except:
             pass
 
-        return valid_moves
-    
+        return filter_moves(valid_moves)
 
     def __repr__(self) -> str:
         return f"{self.color}K"

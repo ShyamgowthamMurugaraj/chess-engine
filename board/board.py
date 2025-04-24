@@ -1,5 +1,5 @@
 import pygame
-from constants import WHITE,BLACK,SQUARE_SIZE,WIDTH,HEIGHT,SCALE,HIGHLIGHT_COLOR
+from constants import WHITE,BLACK,SQUARE_SIZE,WIDTH,HEIGHT,SCALE,HIGHLIGHT_COLOR,LEGAL_COLOR
 from pieces import Empty
 from utils import eval_pos
 from setup_board import board
@@ -56,23 +56,43 @@ piece_images = {
 
 running = True
 selected=None
+to_pos=""
+empty_pos=""
+turn="w"
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
+            if to_pos==None:
+                to_pos=pygame.mouse.get_pos()
+                to_pos=eval_pos(to_pos)
+                print(to_pos)
+                if to_pos in selected.valid_moves() and turn==selected.color:
+                    empty_pos=selected.pos
+                    board[empty_pos[0]][empty_pos[1]]=Empty(empty_pos)
+                    selected.pos=to_pos
+                    board[to_pos[0]][to_pos[1]] = selected
+                    to_pos=None
+                    turn=~selected
+
+
             pos=pygame.mouse.get_pos()
             pos=eval_pos(pos)
             selected=board[pos[0]][pos[1]]
+            to_pos=None
+        
     for row in range(8):
         for col in range(8):
             color = WHITE if (row + col) % 2 == 0 else BLACK
             pygame.draw.rect(screen, color, (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-            if board[row][col]==selected:
-                pygame.draw.rect(screen, HIGHLIGHT_COLOR, (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 3)
-                for i in board[row][col].valid_moves():
-                    pygame.draw.rect(screen, HIGHLIGHT_COLOR, (i[1] * SQUARE_SIZE, i[0] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 3)
+
+
+            if (selected!=None) and ((row, col) in selected.valid_moves()) :
+                center_x = col * SQUARE_SIZE + SQUARE_SIZE // 2
+                center_y = row * SQUARE_SIZE + SQUARE_SIZE // 2
+                pygame.draw.rect(screen, HIGHLIGHT_COLOR, (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 1)
 
             piece = board_state[row][col]
             if type(piece) != Empty:

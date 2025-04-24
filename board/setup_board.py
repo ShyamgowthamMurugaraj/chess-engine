@@ -27,12 +27,16 @@ board[0][6]=Knight("b",(0,6),board)
 board[7][1]=Knight("w",(7,1),board)
 board[7][6]=Knight("w",(7,6),board)
 
-# board[4][4]=Queen("w",(4,4),board)
+# board[4][5]=Bishop("w",(4,5),board)
+# board[4][1]=Rook("b",(4,1),board)
+# board[4][0]=Rook("b",(4,0),board)
+
+
 
 
 if __name__=="__main__":
 
-    # print(board[4][4].valid_moves())
+    print(board[4][4].valid_moves())
 
 
 

@@ -78,48 +78,51 @@ class Rook(Piece):
         current=self.pos
         try:
             current=self.pos
-            while True:
-                if type(self.board[current[0]][current[1]+1])==Empty or ~self.board[current[0]][current[1]+1]==self.color:
-                    valid_moves.append((current[0],current[1]+1))
-                    current=(current[0],current[1]+1)
-                    continue
-                else:
+            for i in range(current[1],8):
+                if type(self.board[current[0]][i])==Empty:
+                    valid_moves.append((current[0],i))
+                elif ~self.board[current[0]][i]==self.color:
+                    valid_moves.append((current[0],i))
+                    break
+                
+        except:
+            pass
+
+        try:
+            current=self.pos
+            
+            for i in range(current[1],-1,-1):
+                if type(self.board[current[0]][i])==Empty:
+                    valid_moves.append((current[0],i))
+                elif ~self.board[current[0]][i]==self.color:
+                    valid_moves.append((current[0],i))
+                    break
+
+            
+
+        except:
+            pass
+
+        try:
+            current=self.pos
+
+            for i in range(current[0],8):
+                if type(self.board[i][current[1]])==Empty:
+                    valid_moves.append((i,current[1]))
+                elif ~self.board[i][current[1]]==self.color:
+                    valid_moves.append((i,current[1]))
                     break
         except:
             pass
 
         try:
             current=self.pos
-            while True:
-                if (type(self.board[current[0]][current[1]-1])==Empty and current[1]-1>=0) or ~self.board[current[0]][current[1]-1]==self.color :
-                    valid_moves.append((current[0],current[1]-1))
-                    current=(current[0],current[1]-1)
-                    continue
-                else:
-                    break
-        except:
-            pass
 
-        try:
-            current=self.pos
-            while True:
-                if type(self.board[current[0]+1][current[1]])==Empty or ~self.board[current[0]+1][current[1]]==self.color:
-                    valid_moves.append((current[0]+1,current[1]))
-                    current=(current[0]+1,current[1])
-                    continue
-                else:
-                    break
-        except:
-            pass
-
-        try:
-            current=self.pos
-            while True:
-                if (type(self.board[current[0]-1][current[1]])==Empty and current[0]-1>=0) or ~self.board[current[0]-1][current[1]]==self.color:
-                    valid_moves.append((current[0]-1,current[1]))
-                    current=(current[0]-1,current[1])
-                    continue
-                else:
+            for i in range(current[0],-1,-1):
+                if type(self.board[i][current[1]])==Empty:
+                    valid_moves.append((i,current[1]))
+                elif ~self.board[i][current[1]]==self.color:
+                    valid_moves.append((i,current[1]))
                     break
         except:
             pass
@@ -142,46 +145,64 @@ class Bishop(Piece):
         try:
             current=self.pos
             while True:
-                if type(self.board[current[0]+1][current[1]+1])==Empty or ~self.board[current[0]+1][current[1]+1]==self.color :
+                if type(self.board[current[0]+1][current[1]+1])==Empty:
                     valid_moves.append((current[0]+1,current[1]+1))
                     current=(current[0]+1,current[1]+1)
                     continue
+                elif ~self.board[current[0]+1][current[1]+1]==self.color:
+                    valid_moves.append((current[0]+1,current[1]+1))
+                    break
+
                 else:
                     break
+            
         except:
             pass
 
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]-1][current[1]-1])==Empty and (current[1]-1>=0 and current[0]-1>=0)) or ~self.board[current[0]-1][current[1]-1]==self.color:
+                if (type(self.board[current[0]-1][current[1]-1])==Empty and (current[1]-1>=0 and current[0]-1>=0)):
                     valid_moves.append((current[0]-1,current[1]-1))
                     current=(current[0]-1,current[1]-1)
                     continue
+                elif ~self.board[current[0]-1][current[1]-1]==self.color:
+                    valid_moves.append((current[0]-1,current[1]-1))
+                    break
+
                 else:
                     break
+
+           
         except:
             pass
 
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]-1][current[1]+1])==Empty and current[0]-1>=0) or ~self.board[current[0]-1][current[1]+1]==self.color:
+                if (type(self.board[current[0]-1][current[1]+1])==Empty and (current[1]-1>=0)):
                     valid_moves.append((current[0]-1,current[1]+1))
                     current=(current[0]-1,current[1]+1)
                     continue
+                elif ~self.board[current[0]-1][current[1]+1]==self.color:
+                    valid_moves.append((current[0]-1,current[1]+1))
+                    break
+
                 else:
                     break
         except:
             pass
-
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]+1][current[1]-1])==Empty and current[1]-1>=0) or ~self.board[current[0]+1][current[1]-1]==self.color:
+                if (type(self.board[current[0]+1][current[1]-1])==Empty and current[1]-1>=0):
                     valid_moves.append((current[0]+1,current[1]-1))
                     current=(current[0]+1,current[1]-1)
                     continue
+                elif ~self.board[current[0]+1][current[1]-1]==self.color:
+                    valid_moves.append((current[0]+1,current[1]-1))
+                    break
+
                 else:
                     break
         except:
@@ -203,94 +224,115 @@ class Queen(Piece):
         try:
             current=self.pos
             while True:
-                if type(self.board[current[0]+1][current[1]+1])==Empty or ~self.board[current[0]+1][current[1]+1]==self.color :
+                if type(self.board[current[0]+1][current[1]+1])==Empty:
                     valid_moves.append((current[0]+1,current[1]+1))
                     current=(current[0]+1,current[1]+1)
                     continue
+                elif ~self.board[current[0]+1][current[1]+1]==self.color:
+                    valid_moves.append((current[0]+1,current[1]+1))
+                    break
+
                 else:
                     break
+            
         except:
             pass
 
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]-1][current[1]-1])==Empty and (current[1]-1>=0 and current[0]-1>=0)) or ~self.board[current[0]-1][current[1]-1]==self.color:
+                if (type(self.board[current[0]-1][current[1]-1])==Empty and (current[1]-1>=0 and current[0]-1>=0)):
                     valid_moves.append((current[0]-1,current[1]-1))
                     current=(current[0]-1,current[1]-1)
                     continue
+                elif ~self.board[current[0]-1][current[1]-1]==self.color:
+                    valid_moves.append((current[0]-1,current[1]-1))
+                    break
+
                 else:
                     break
+
+           
         except:
             pass
 
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]-1][current[1]+1])==Empty and current[0]-1>=0) or ~self.board[current[0]-1][current[1]+1]==self.color:
+                if (type(self.board[current[0]-1][current[1]+1])==Empty and (current[1]-1>=0)):
                     valid_moves.append((current[0]-1,current[1]+1))
                     current=(current[0]-1,current[1]+1)
                     continue
+                elif ~self.board[current[0]-1][current[1]+1]==self.color:
+                    valid_moves.append((current[0]-1,current[1]+1))
+                    break
+
                 else:
                     break
         except:
             pass
-
         try:
             current=self.pos
             while True:
-                if (type(self.board[current[0]+1][current[1]-1])==Empty and current[1]-1>=0) or ~self.board[current[0]+1][current[1]-1]==self.color:
+                if (type(self.board[current[0]+1][current[1]-1])==Empty and current[1]-1>=0):
                     valid_moves.append((current[0]+1,current[1]-1))
                     current=(current[0]+1,current[1]-1)
                     continue
+                elif ~self.board[current[0]+1][current[1]-1]==self.color:
+                    valid_moves.append((current[0]+1,current[1]-1))
+                    break
+
                 else:
                     break
         except:
             pass
         try:
             current=self.pos
-            while True:
-                if type(self.board[current[0]][current[1]+1])==Empty or ~self.board[current[0]][current[1]+1]==self.color:
-                    valid_moves.append((current[0],current[1]+1))
-                    current=(current[0],current[1]+1)
-                    continue
-                else:
+            for i in range(current[1],8):
+                if type(self.board[current[0]][i])==Empty:
+                    valid_moves.append((current[0],i))
+                elif ~self.board[current[0]][i]==self.color:
+                    valid_moves.append((current[0],i))
+                    break
+                
+        except:
+            pass
+
+        try:
+            current=self.pos
+            
+            for i in range(current[1],-1,-1):
+                if type(self.board[current[0]][i])==Empty:
+                    valid_moves.append((current[0],i))
+                elif ~self.board[current[0]][i]==self.color:
+                    valid_moves.append((current[0],i))
+                    break
+
+            
+
+        except:
+            pass
+
+        try:
+            current=self.pos
+
+            for i in range(current[0],8):
+                if type(self.board[i][current[1]])==Empty:
+                    valid_moves.append((i,current[1]))
+                elif ~self.board[i][current[1]]==self.color:
+                    valid_moves.append((i,current[1]))
                     break
         except:
             pass
 
         try:
             current=self.pos
-            while True:
-                if (type(self.board[current[0]][current[1]-1])==Empty and current[1]-1>=0) or ~self.board[current[0]][current[1]-1]==self.color :
-                    valid_moves.append((current[0],current[1]-1))
-                    current=(current[0],current[1]-1)
-                    continue
-                else:
-                    break
-        except:
-            pass
 
-        try:
-            current=self.pos
-            while True:
-                if type(self.board[current[0]+1][current[1]])==Empty or ~self.board[current[0]+1][current[1]]==self.color:
-                    valid_moves.append((current[0]+1,current[1]))
-                    current=(current[0]+1,current[1])
-                    continue
-                else:
-                    break
-        except:
-            pass
-
-        try:
-            current=self.pos
-            while True:
-                if (type(self.board[current[0]-1][current[1]])==Empty and current[0]-1>=0) or ~self.board[current[0]-1][current[1]]==self.color:
-                    valid_moves.append((current[0]-1,current[1]))
-                    current=(current[0]-1,current[1])
-                    continue
-                else:
+            for i in range(current[0],-1,-1):
+                if type(self.board[i][current[1]])==Empty:
+                    valid_moves.append((i,current[1]))
+                elif ~self.board[i][current[1]]==self.color:
+                    valid_moves.append((i,current[1]))
                     break
         except:
             pass

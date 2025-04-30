@@ -1,8 +1,9 @@
 import pygame
 from constants import WHITE,BLACK,SQUARE_SIZE,WIDTH,HEIGHT,SCALE,HIGHLIGHT_COLOR,LEGAL_COLOR
-from pieces import Empty
+from pieces import Empty,King
 from utils import eval_pos
 from setup_board import board
+from moves import make_move
 
 pygame.init()
 
@@ -47,7 +48,6 @@ black_bishop = pygame.transform.scale(black_bishop, (SCALE, SCALE))
 black_queen = pygame.transform.scale(black_queen, (SCALE, SCALE))
 black_king = pygame.transform.scale(black_king, (SCALE, SCALE))
 
-board_state = board
 
 piece_images = {
     "wP": white_pawn, "wR": white_rook, "wN": white_knight, "wB": white_bishop, "wQ": white_queen, "wK": white_king,
@@ -60,29 +60,24 @@ to_pos=""
 empty_pos=""
 turn="w"
 while running:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if to_pos==None:
-                to_pos=pygame.mouse.get_pos()
-                to_pos=eval_pos(to_pos)
-                print(to_pos)
-                if to_pos in selected.valid_moves() and turn==selected.color:
-                    empty_pos=selected.pos
-                    board[empty_pos[0]][empty_pos[1]]=Empty(empty_pos)
-                    selected.pos=to_pos
-                    board[to_pos[0]][to_pos[1]] = selected
-                    to_pos=None
-                    turn=~selected
+ 
+            turn = make_move(to_pos,turn,selected,board)
 
 
             pos=pygame.mouse.get_pos()
             pos=eval_pos(pos)
             selected=board[pos[0]][pos[1]]
+            # print(selected.valid_moves())
             to_pos=None
-        
+
+           
+
     for row in range(8):
         for col in range(8):
             color = WHITE if (row + col) % 2 == 0 else BLACK
@@ -94,7 +89,7 @@ while running:
                 center_y = row * SQUARE_SIZE + SQUARE_SIZE // 2
                 pygame.draw.rect(screen, HIGHLIGHT_COLOR, (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 1)
 
-            piece = board_state[row][col]
+            piece = board[row][col]
             if type(piece) != Empty:
                 image = piece_images[str(piece)]
                 piece_x = col * SQUARE_SIZE + (SQUARE_SIZE - image.get_width()) // 2

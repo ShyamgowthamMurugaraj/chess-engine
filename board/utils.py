@@ -1,5 +1,7 @@
 from constants import SQUARE_SIZE
 
+
+
 def eval_pos(pos:tuple)->tuple:
     x, y = pos
     col = x // SQUARE_SIZE
@@ -13,3 +15,4 @@ def filter_moves(moves:list)->list:
             new_moves.append((row,col))
     
     return new_moves
+

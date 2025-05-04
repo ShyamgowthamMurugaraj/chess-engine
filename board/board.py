@@ -1,6 +1,6 @@
 import pygame
-from constants import WHITE,BLACK,SQUARE_SIZE,WIDTH,HEIGHT,SCALE,HIGHLIGHT_COLOR,LEGAL_COLOR
-from pieces import Empty,King
+from constants import WHITE,BLACK,SQUARE_SIZE,WIDTH,HEIGHT,SCALE,HIGHLIGHT_COLOR
+from pieces import Empty,King,Rook,Pawn
 from utils import eval_pos
 from setup_board import board
 from moves import make_move
@@ -66,15 +66,27 @@ while running:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
+
  
             turn = make_move(to_pos,turn,selected,board)
-
+            
 
             pos=pygame.mouse.get_pos()
             pos=eval_pos(pos)
             selected=board[pos[0]][pos[1]]
-            # print(selected.valid_moves())
+            print(selected.pos)
+            
             to_pos=None
+    if type(selected) in [Rook,King]:
+            
+            if type(selected)==King:
+                if selected.pos not in [(0,4),(7,4)]:
+                    selected.moved=True
+            if type(selected)==Rook:
+                if selected.pos not in [(0,0),(7,0),(0,7),(7,7)]:
+                    selected.moved=True
+    
+
 
            
 

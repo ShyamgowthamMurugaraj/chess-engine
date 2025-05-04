@@ -1,6 +1,6 @@
 from pieces import Empty,Pawn,Rook,Bishop,Queen,Knight,King
-
-board=[[Empty((j,i)) for i in range(8) ] for j in range(8)]
+board=[]
+board=[[Empty((j,i),board) for i in range(8) ] for j in range(8)]
 board[1]=[Pawn("b",(1,i),board) for i in range(8)]
 board[6]=[Pawn("w",(6,i),board) for i in range(8)]
 
@@ -8,6 +8,8 @@ board[0][0]=Rook("b",(0,0),board)
 board[0][7]=Rook("b",(0,7),board)
 board[7][7]=Rook("w",(7,7),board)
 board[7][0]=Rook("w",(7,0),board)
+
+
 
 
 

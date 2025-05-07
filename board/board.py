@@ -2,10 +2,11 @@ import pygame
 from constants import WHITE,BLACK,SQUARE_SIZE,WIDTH,HEIGHT,SCALE,HIGHLIGHT_COLOR
 from pieces import Empty,King,Rook,Pawn
 from utils import eval_pos
-from setup_board import board
+from setup_board import make_board
 from moves import make_move
 
 pygame.init()
+
 
 
 
@@ -58,7 +59,9 @@ running = True
 selected=None
 to_pos=""
 empty_pos=""
+player="w"
 turn="w"
+board=make_board(player)
 while running:
 
     for event in pygame.event.get():
@@ -73,8 +76,8 @@ while running:
 
             pos=pygame.mouse.get_pos()
             pos=eval_pos(pos)
+
             selected=board[pos[0]][pos[1]]
-            print(selected.pos)
             
             to_pos=None
     if type(selected) in [Rook,King]:
@@ -92,8 +95,13 @@ while running:
 
     for row in range(8):
         for col in range(8):
-            color = WHITE if (row + col) % 2 == 0 else BLACK
+
+            if player=="w":
+                color = WHITE if (row + col) % 2 == 0 else BLACK
+            if player=="b":
+                color = BLACK if (row + col) % 2 == 0 else WHITE
             pygame.draw.rect(screen, color, (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                
 
 
             if (selected!=None) and ((row, col) in selected.valid_moves()) :
@@ -107,6 +115,8 @@ while running:
                 piece_x = col * SQUARE_SIZE + (SQUARE_SIZE - image.get_width()) // 2
                 piece_y = row * SQUARE_SIZE + (SQUARE_SIZE - image.get_height()) // 2
                 screen.blit(image, (piece_x, piece_y))
+    
+        
 
     pygame.display.flip()
 

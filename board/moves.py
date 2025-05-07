@@ -11,9 +11,11 @@ move_counter=0
 def make_move(to_pos,turn,selected,board,empty_pos=None):
     global move_counter
     
+    
     if to_pos==None:
         to_pos=pygame.mouse.get_pos()
         to_pos=eval_pos(to_pos)
+        
         
         if type(selected)==King and to_pos==(selected.pos[0],selected.pos[1]+2) and selected.color==turn:
             selected.king_castled=True
@@ -34,23 +36,27 @@ def make_move(to_pos,turn,selected,board,empty_pos=None):
             old_pos=selected.pos
             selected.pos=to_pos
             board[to_pos[0]][to_pos[1]] = selected
-            if type(selected) == Pawn and selected.color == turn:
-                if to_pos==(old_pos[0]-1,old_pos[1]-1) and board[old_pos[0]][old_pos[1]-1].move_moved_2==move_counter-1:
-                    selected.en_passanted=True 
-                    selected.en_passantobe=(old_pos[0],old_pos[1]-1)
-            if type(selected) == Pawn and selected.color == turn and board[old_pos[0]][old_pos[1]+1].move_moved_2==move_counter-1:
-                if to_pos==(old_pos[0]+1,old_pos[1]+1):
-                    selected.en_passanted=True 
-                    selected.en_passantobe=(old_pos[0],old_pos[1]+1)  
-            if type(selected) == Pawn and selected.color == turn and board[old_pos[0]][old_pos[1]-1].move_moved_2==move_counter-1:
-                if to_pos==(old_pos[0]+1,old_pos[1]-1):
-                    selected.en_passanted=True 
-                    selected.en_passantobe=(old_pos[0],old_pos[1]-1)  
+            
+            if old_pos[1]-1>=0:
+                if type(selected) == Pawn and selected.color == turn:
+                    if to_pos==(old_pos[0]-1,old_pos[1]-1) and board[old_pos[0]][old_pos[1]-1].move_moved_2==move_counter-1:
+                        selected.en_passanted=True 
+                        selected.en_passantobe=(old_pos[0],old_pos[1]-1)
+                if type(selected) == Pawn and selected.color == turn and board[old_pos[0]][old_pos[1]-1].move_moved_2==move_counter-1:
+                    if to_pos==(old_pos[0]+1,old_pos[1]-1):
+                        selected.en_passanted=True 
+                        selected.en_passantobe=(old_pos[0],old_pos[1]-1)  
 
-            if type(selected) == Pawn and selected.color == turn and board[old_pos[0]][old_pos[1]+1].move_moved_2==move_counter-1:
-                if to_pos==(old_pos[0]-1,old_pos[1]+1):
-                    selected.en_passanted=True 
-                    selected.en_passantobe=(old_pos[0],old_pos[1]+1)                
+            if old_pos[1]+1<=7:
+                if type(selected) == Pawn and selected.color == turn and board[old_pos[0]][old_pos[1]+1].move_moved_2==move_counter-1:
+                    if to_pos==(old_pos[0]+1,old_pos[1]+1):
+                        selected.en_passanted=True 
+                        selected.en_passantobe=(old_pos[0],old_pos[1]+1)  
+                
+                if type(selected) == Pawn and selected.color == turn and board[old_pos[0]][old_pos[1]+1].move_moved_2==move_counter-1:
+                    if to_pos==(old_pos[0]-1,old_pos[1]+1):
+                        selected.en_passanted=True 
+                        selected.en_passantobe=(old_pos[0],old_pos[1]+1)                
 
             to_pos=None
             turn=~selected

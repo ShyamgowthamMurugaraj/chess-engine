@@ -21,7 +21,11 @@ class Empty:
         return [self.pos]
     
     def check(self):
-        color="w" if self.pos[0]==7 else "b"
+        if self.pos[0]==7:
+            color=self.board[7][4].color
+        if self.pos[0]==0:
+            color=self.board[0][4].color
+
         for row in self.board:
             for piece in row:
                 if piece.color!=None:
@@ -60,54 +64,63 @@ class Pawn(Piece):
         self.en_passantobe=()
         self.move_moved_2=None
         self.move=None
+        self.init_pos=self.pos
 
     
 
     def valid_moves(self) -> list:
 
         valid_moves=[]
-        if self.color=="b":
+        if self.init_pos[0]==1:
             if self.pos[0]+1<8 and type(self.board[self.pos[0]+1][self.pos[1]])==Empty:
                 valid_moves.append((self.pos[0]+1,self.pos[1]))
             if self.pos[0]+2==3 and type(self.board[self.pos[0]+2][self.pos[1]])==Empty and type(self.board[self.pos[0]+1][self.pos[1]])==Empty:
                 valid_moves.append((self.pos[0]+2,self.pos[1]))
             try:
-                if self.board[self.pos[0]+1][self.pos[1]-1].color=="w":
+                if ~self.board[self.pos[0]+1][self.pos[1]-1]==self.color:
                     valid_moves.append((self.pos[0]+1,self.pos[1]-1))
-                if self.board[self.pos[0]+1][self.pos[1]+1].color=="w":
+                if ~self.board[self.pos[0]+1][self.pos[1]+1]==self.color:
                     valid_moves.append((self.pos[0]+1,self.pos[1]+1))
                 
             except:
                 pass
             try: 
-                if not isinstance(self.board[self.pos[0]][self.pos[1]+1],Empty): 
-                    if self.board[self.pos[0]][self.pos[1]+1].just_moved_two:
-                        valid_moves.append((self.pos[0]+1,self.pos[1]+1))
-                if not isinstance(self.board[self.pos[0]][self.pos[1]-1],Empty):
-                    if self.board[self.pos[0]][self.pos[1]-1].just_moved_two:
-                        valid_moves.append((self.pos[0]+1,self.pos[1]-1))
+                if self.pos[1]+1<=7:
+                    if type(self.board[self.pos[0]][self.pos[1]+1]) not in [Empty,Rook,Bishop,King,Queen,Knight]: 
+                        if self.board[self.pos[0]][self.pos[1]+1].just_moved_two:
+                            valid_moves.append((self.pos[0]+1,self.pos[1]+1))
+                
+                if self.pos[1]-1>=0:
+                
+                    if type(self.board[self.pos[0]][self.pos[1]-1]) not in [Empty,Rook,Bishop,King,Queen,Knight]:
+                        if self.board[self.pos[0]][self.pos[1]-1].just_moved_two:
+                            valid_moves.append((self.pos[0]+1,self.pos[1]-1))
             except Exception as e:
                 print(e)
-        if self.color=="w":
+        if self.init_pos[0]==6:
             if self.pos[0]-1>0 and type(self.board[self.pos[0]-1][self.pos[1]])==Empty:
                 valid_moves.append((self.pos[0]-1,self.pos[1]))
             if self.pos[0]-2==4 and type(self.board[self.pos[0]-2][self.pos[1]])==Empty and type(self.board[self.pos[0]-1][self.pos[1]])==Empty:
                 valid_moves.append((self.pos[0]-2,self.pos[1]))
             try:
-                if self.board[self.pos[0]-1][self.pos[1]-1].color=="b":
+                if ~self.board[self.pos[0]-1][self.pos[1]-1]==self.color:
                     valid_moves.append((self.pos[0]-1,self.pos[1]-1))
-                if self.board[self.pos[0]-1][self.pos[1]+1].color=="b":
+                if ~self.board[self.pos[0]-1][self.pos[1]+1]==self.color:
                     valid_moves.append((self.pos[0]-1,self.pos[1]+1))
 
             except:
                 pass
             try:
-                if not isinstance(self.board[self.pos[0]][self.pos[1]+1],Empty):
-                    if self.board[self.pos[0]][self.pos[1]+1].just_moved_two:
-                        valid_moves.append((self.pos[0]-1,self.pos[1]+1))
-                if not isinstance(self.board[self.pos[0]][self.pos[1]-1],Empty): 
-                    if self.board[self.pos[0]][self.pos[1]-1].just_moved_two:
-                        valid_moves.append((self.pos[0]-1,self.pos[1]-1))
+                if self.pos[1]+1<=7:
+                    if type(self.board[self.pos[0]][self.pos[1]+1]) not in [Empty,Rook,Bishop,King,Queen,Knight]:
+                        if self.board[self.pos[0]][self.pos[1]+1].just_moved_two:
+                            valid_moves.append((self.pos[0]-1,self.pos[1]+1))
+
+                if self.pos[1]-1>=0:
+                
+                    if type(self.board[self.pos[0]][self.pos[1]-1]) not in [Empty,Rook,Bishop,King,Queen,Knight]: 
+                        if self.board[self.pos[0]][self.pos[1]-1].just_moved_two:
+                            valid_moves.append((self.pos[0]-1,self.pos[1]-1))
                 
             except Exception as e:
                 print(e)
@@ -603,6 +616,7 @@ class King(Piece):
         self.moved=False
         self.king_castled=False
         self.queen_castled=False
+        self._validating_moves = False  # Add flag to prevent recursion
 
         
     
@@ -610,6 +624,10 @@ class King(Piece):
 
 
     def valid_moves(self) -> list:
+        if self._validating_moves:  # If we're already validating moves, return empty list
+            return []
+            
+        self._validating_moves = True
         valid_moves=[]
         try:
             if type(self.board[self.pos[0]][self.pos[1]+1])==Empty or ~self.board[self.pos[0]][self.pos[1]+1]==self.color:
@@ -710,9 +728,13 @@ class King(Piece):
             self.board[self.pos[0]][self.pos[1]] = self
 
         valid_moves = legal_moves
+
+        
+
        
             
 
+        self._validating_moves = False
         return filter_moves(valid_moves)
     
     def squares_in_all_dir(self):
@@ -892,25 +914,32 @@ class King(Piece):
 
     
     def check(self):
+        
+        
         if self.checking:
             return (False, None)  
         self.checking = True
 
         try:
+    
+
             for square in self.squares_in_all_dir():
-                j=self.board[square[0]][square[1]]
-                if type(j) != Empty:
+                j = self.board[square[0]][square[1]]
+                if type(j) != Empty: 
                     if j.color != self.color:
                         if self.pos in j.valid_moves():
+                            self.checking = False
                             return (True, j)
         except Exception as e:
             print(e)
         finally:
             self.checking = False  
 
+        return (False, None)
+
 
         
-        return (False, None)
+
 
         
         
